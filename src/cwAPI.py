@@ -150,7 +150,7 @@ class API():
             json_data = json.loads( r.text)
             return json_data 
 
-    class TransactionsNew():   ## TODO Implement when implemented
+    class TransactionsNew():   ## TODO Test when implemented
         def construct(self,walletId,payments,withdrawal="self",metadata=None,time_to_live=None):
             data={"payments":payments,"withdrawal":withdrawal}
             if metadata!=None:
@@ -160,7 +160,36 @@ class API():
 
             r = requests.post(self.port+"/v2/wallets/" + walletId + "/transactions-construct" ,data=json.dumps(data) , verify=self.ca, headers=self.headers, cert=self.cert)
             json_data = json.loads( r.text)
-            return json_data  
+            return json_data 
+
+        def sign(self,walletId,passphrase,transaction):
+            data={"passphrase":passphrase,"transaction":transaction}
+            r = requests.post(self.port+"/v2/wallets/" + walletId + "/transactions-sign" ,data=json.dumps(data) , verify=self.ca, headers=self.headers, cert=self.cert)
+            json_data = json.loads( r.text)
+            return json_data 
+
+        def decode(self,walletId,transaction):
+            data={"transaction":transaction}
+            r = requests.post(self.port+"/v2/wallets/" + walletId + "/transactions-decode" ,data=json.dumps(data) , verify=self.ca, headers=self.headers, cert=self.cert)
+            json_data = json.loads( r.text)
+            return json_data 
+
+        def submit(self,walletId,transaction):    
+            data={"transaction":transaction}
+            r = requests.post(self.port+"/v2/wallets/" + walletId + "/transactions-decode" ,data=json.dumps(data) , verify=self.ca, headers=self.headers, cert=self.cert)
+            json_data = json.loads( r.text)
+            return json_data 
+
+        def balance(self,walletId,transaction,inputs=None,redeemers=None):
+            data={"transaction":transaction}
+            if inputs!=None:
+                data["inputs"] = inputs
+            if redeemers!=None:
+                data["redeemers"]=redeemers    
+            r = requests.post(self.port+"/v2/wallets/" + walletId + "/transactions-balance" ,data=json.dumps(data) , verify=self.ca, headers=self.headers, cert=self.cert)
+            json_data = json.loads( r.text)
+            return json_data 
+
 
     class Migrations():
         def plan(self,walletId,addresses):
