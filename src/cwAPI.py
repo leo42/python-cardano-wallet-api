@@ -1,4 +1,3 @@
-from asyncio.windows_events import NULL
 import requests 
 import json
 class API():
@@ -34,7 +33,7 @@ class API():
             
         def delete(self,walletId):
             r = requests.delete(self.port+"/v2/wallets/" + walletId , verify=self.ca, headers=self.headers, cert=self.cert)
-            if r.status_code == 200:
+            if r.ok:
                 return {"OK"}
             json_data = json.loads( r.text)
 
@@ -150,7 +149,95 @@ class API():
             r = requests.delete(self.port+"/v2/wallets/" + walletId + "/transactions/" + transactionId , verify=self.ca, headers=self.headers, cert=self.cert)
             json_data = json.loads( r.text)
             return json_data 
+
+    class TransactionsNew():   ## TODO Implement when implemented
+        def construct(self,walletId,payments,withdrawal="self",metadata=None,time_to_live=None):
+            data={"payments":payments,"withdrawal":withdrawal}
+            if metadata!=None:
+                data["metadata"]=metadata
+            if time_to_live!=None:
+                data["time_to_live"]=time_to_live  
+
+            r = requests.post(self.port+"/v2/wallets/" + walletId + "/transactions-construct" ,data=json.dumps(data) , verify=self.ca, headers=self.headers, cert=self.cert)
+            json_data = json.loads( r.text)
+            return json_data  
+
+    class Migrations():
+        def plan(self,walletId,addresses):
+            data={"addresses":addresses}
+
+            r = requests.post(self.port+"/v2/wallets/" + walletId + "/transactions-construct" ,data=json.dumps(data) , verify=self.ca, headers=self.headers, cert=self.cert)
+            json_data = json.loads( r.text)
+            return json_data  
+
+        def migrate(self,walletId,passphrase,addresses):
+            data={"addresses":addresses,"passphrase":passphrase}
             
+            r = requests.post(self.port+"/v2/wallets/" + walletId + "/migrations" ,data=json.dumps(data) , verify=self.ca, headers=self.headers, cert=self.cert)
+            json_data = json.loads( r.text)
+            return json_data  
+
+    class StakePools():
+        def listStakeKeys(self,walletId):
+            r = requests.get(self.port+"/v2/wallets/" + walletId + "/stake-keys"  , verify=self.ca, headers=self.headers, cert=self.cert)
+            json_data = json.loads( r.text)
+            return json_data  
+
+        def list(self,stake):
+            r = requests.get(self.port+"/v2/stake-pools?stake="+ stake  , verify=self.ca, headers=self.headers, cert=self.cert)
+            json_data = json.loads( r.text)
+            return json_data  
+
+        def viewMaintananceActions(self):
+            r = requests.get(self.port+"/v2/stake-pools/maintenance-actions"  , verify=self.ca, headers=self.headers, cert=self.cert)
+            json_data = json.loads( r.text)
+            return json_data  
+
+        def triggerMaintananceActions(self,maintenance_action):
+            data={"maintenance_action":maintenance_action}
+            r = requests.post(self.port+"/v2/stake-pools/maintenance-actions"  , data=json.dumps(data) ,verify=self.ca, headers=self.headers, cert=self.cert)
+            if r.ok:
+                return {"OK"}
+            json_data = json.loads( r.text)
+            return json_data     
+
+        def estimateFee(self,walletId):
+            r = requests.get(self.port+"/v2/wallets/" + walletId + "/delegation-fees" , verify=self.ca, headers=self.headers, cert=self.cert)
+            json_data = json.loads( r.text)
+            return json_data  
+
+        def quit(self,walletId,passphrase):
+            data={"passphrase":passphrase}
+            r = requests.delete(self.port+"/v2/stake-pools/*/wallets/" + walletId , data=json.dumps(data), verify=self.ca, headers=self.headers, cert=self.cert)
+            json_data = json.loads( r.text)
+            return json_data  
+        def join(self,stakePoolId,walletId,passphrase):
+            data={"passphrase":passphrase}
+            r = requests.put(self.port+"/v2/stake-pools/" + stakePoolId + "/wallets/" + walletId , data=json.dumps(data), verify=self.ca, headers=self.headers, cert=self.cert)
+            json_data = json.loads( r.text)
+            return json_data 
+            
+    class Keys():
+        def createAccountPublickKey(self,walletId,index,passphrase,format,purpose=None):
+            data={"passphrase":passphrase,"format":format}
+            if purpose!=None:
+                data["purpose"]=purpose
+
+            r = requests.post(self.port+"/v2/wallets/" + walletId + "/keys/" + index , data=json.dumps(data), verify=self.ca, headers=self.headers, cert=self.cert)
+            json_data = json.loads( r.text)
+            return json_data 
+        
+        def getAccountPublicKey(self, walletId):
+            r = requests.get(self.port+"/v2/wallets/" + walletId + "/keys",  verify=self.ca, headers=self.headers, cert=self.cert)
+            json_data = json.loads( r.text)
+            return json_data 
+
+        def getPublicKey(self, walletId, role, index):
+            r = requests.get(self.port+"/v2/wallets/" + walletId + "/keys/" + role + "/" + index,  verify=self.ca, headers=self.headers, cert=self.cert)
+            json_data = json.loads( r.text)
+            return json_data 
+
+
     class Network():
         def information(self):
             r = requests.get(self.port+"/v2/network/information", verify=self.ca, headers=self.headers, cert=self.cert)
