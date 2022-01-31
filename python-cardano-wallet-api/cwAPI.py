@@ -150,7 +150,8 @@ class API():
             json_data = json.loads( r.text)
             return json_data 
 
-    class TransactionsNew():   ## TODO Test when implemented
+## TODO Test when implemented
+    class TransactionsNew():   
         def construct(self,walletId,payments,withdrawal="self",metadata=None,time_to_live=None):
             data={"payments":payments,"withdrawal":withdrawal}
             if metadata!=None:
@@ -189,7 +190,6 @@ class API():
             r = requests.post(self.port+"/v2/wallets/" + walletId + "/transactions-balance" ,data=json.dumps(data) , verify=self.ca, headers=self.headers, cert=self.cert)
             json_data = json.loads( r.text)
             return json_data 
-
 
     class Migrations():
         def plan(self,walletId,addresses):
@@ -265,7 +265,6 @@ class API():
             r = requests.get(self.port+"/v2/wallets/" + walletId + "/keys/" + role + "/" + index,  verify=self.ca, headers=self.headers, cert=self.cert)
             json_data = json.loads( r.text)
             return json_data 
-
 
     class Network():
         def information(self):
