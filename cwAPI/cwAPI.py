@@ -1,6 +1,6 @@
 import requests 
 import json
-class API():
+class cwAPI():
     def __init__(self):
         self.headers = {'Accept-Encoding': 'gzip, deflate, br', 'Content-Type': 'application/json', 'Accept': 'application/json', 'Connection': 'keep-alive', 'DNT': '1'}
         self.ca=None
