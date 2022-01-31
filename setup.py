@@ -2,13 +2,13 @@ from distutils.core import setup
 setup(
   name = 'cwAPI',         
   packages = ['cwAPI'],   
-  version = '0.0.2',      
+  version = '0.0.3',      
   license='Apache',      
   description = 'A python wrapper for the Cardano-node API',  
   author = 'Leandros Holleman',                  
   author_email = 'leantrosh@gmail.com',     
   url = 'https://github.com/leo42/python-cardano-wallet-api',  
-  download_url = 'https://github.com/leo42/python-cardano-wallet-api/archive/refs/tags/0.0.1.tar.gz',    
+  download_url = 'https://github.com/leo42/python-cardano-wallet-api/archive/refs/tags/0.0.3.tar.gz',    
   keywords = ['Cardano-wallet', 'API', 'Wrapper'],  
   install_requires=[            # I get to this in a second
           'requests',

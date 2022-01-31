@@ -124,7 +124,7 @@ class cwAPI():
             json_data = json.loads( r.text)
             return json_data         
 
-        def create(self,passphrase,walletId,payments,withdrawal="self",metadata=None,time_to_live=None):
+        def create(self,walletId,passphrase,payments,withdrawal="self",metadata=None,time_to_live=None):
             data={"passphrase":passphrase,"payments":payments,"withdrawal":withdrawal}
             if metadata!=None:
                 data["metadata"]=metadata
