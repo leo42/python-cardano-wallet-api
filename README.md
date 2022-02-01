@@ -19,7 +19,7 @@ pip install cwAPI
 
 Import using:
 ```sh
-pip install cwAPI
+from cwAPI import cwAPI
 ```
 
 Intialize API and configure port:
