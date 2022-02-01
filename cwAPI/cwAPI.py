@@ -284,4 +284,56 @@ class cwAPI():
             json_data = json.loads( r.text)
 
             return json_data
-        
+ ###TODO test when implemented       
+    class SharedWallets():
+        def create(self,name,mnemonic_sentence,passphrase,account_index,payment_script_template,mnemonic_second_factor=None,delegation_script_template=None,script_validation=None):
+            data={"name":name,"mnemonic_sentence":mnemonic_sentence,"passphrase":passphrase,"account_index":account_index,"payment_script_template":payment_script_template}
+            if mnemonic_second_factor!=None:
+                data["mnemonic_second_factor"]=mnemonic_second_factor
+            if  delegation_script_template!=None :
+                data["delegation_script_template"]=delegation_script_template
+            if  script_validation!=None :
+                data["script_validation"]=script_validation
+            r = requests.post(self.port+"/v2/shared-wallets", data=json.dumps(data),verify=self.ca, headers=self.headers, cert=self.cert)
+            json_data = json.loads( r.text)
+
+            return json_data
+
+        def  list(self):
+            r = requests.get(self.port+"/v2/shared-wallets",verify=self.ca, headers=self.headers, cert=self.cert)
+            json_data = json.loads( r.text)  
+            return json_data
+
+        def  get(self,walletId):
+            r = requests.get(self.port+"/v2/shared-wallets/" + walletId,verify=self.ca, headers=self.headers, cert=self.cert)
+            json_data = json.loads( r.text)  
+            return json_data
+
+        def  delete(self,walletId):
+            r = requests.delete(self.port+"/v2/shared-wallets/" + walletId,verify=self.ca, headers=self.headers, cert=self.cert)
+            json_data = json.loads( r.text)  
+            return json_data
+
+    class SharedKeys():
+        def createAccountPublicKey(self,walletId,index,passphrase,format):
+            data={"passphrase":passphrase,"format":format}
+            
+            r = requests.post(self.port+"/v2/shared-wallets/"  + walletId +"/keys/" + index, data=json.dumps(data),verify=self.ca, headers=self.headers, cert=self.cert)
+            json_data = json.loads( r.text)
+
+            return json_data
+
+        def getAccountPublicKey(self,walletId):
+            r = requests.get(self.port+"/v2/shared-wallets/"  + walletId +"/keys" ,verify=self.ca, headers=self.headers, cert=self.cert)
+            json_data = json.loads( r.text)
+
+            return json_data
+
+        def getPublicKey(self,walletId,role,index,hash=False):
+            data={"hash":hash}
+            r = requests.get(self.port+"/v2/shared-wallets/" + walletId + "/keys/" + role + "/" + index, data=json.dumps(data),verify=self.ca, headers=self.headers, cert=self.cert)
+            json_data = json.loads( r.text)
+
+            return json_data
+
+
